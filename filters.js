@@ -1,3 +1,5 @@
+var marked = require('marked');
+
 // Setting custom filters on Swig
 
 module.exports = function(swig) {
@@ -10,7 +12,14 @@ module.exports = function(swig) {
     }
     return "<a href='"+doc.full_route+"'>"+link_name+"</a>";
   };
-  page_link.safe = true;
 
+  var markedFilter = function(body) {
+    return marked(body);
+  };
+
+  markedFilter.safe = true;
+  swig.setFilter('marked', markedFilter);
+
+  page_link.safe = true;
   swig.setFilter('page_link', page_link);
 };
