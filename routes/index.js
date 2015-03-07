@@ -52,7 +52,7 @@ router.post('/wiki/edit/:id', function(req, res, next) {
 	  page.url_name = generateUrlName(page.title),
 	  page.tags = req.body.page_tags.split(" ");
 		page.save(function () {
-			return res.redirect('/');
+			return res.redirect('/wiki/' + page.url_name);
 		});
 	});
 });
