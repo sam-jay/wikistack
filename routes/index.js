@@ -10,8 +10,28 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/wiki/:url_name', function(req, res, next) {
-	models.Page.findOne({ url_name: req.params.url_name }, function(err, data) {
-		if (err) { return res.status(404).json(); }
+	models.Page.find({ url_name: req.params.url_name }, function(err, data) {
+		if (err || data.length === 0) { return res.status(404).json(); }
+		if (data.length > 1) {
+			// disambiguation
+			return res.redirect('/wiki/' + req.params.url_name + '/disambiguation');
+		}
+		data[0].findSimilar(function(err, similar) {
+			for (var i = 0; i < similar.length; i++) {
+				if (JSON.stringify(data[0]._id) === JSON.stringify(similar[i]._id)) {
+					similar.splice(i, 1);
+					break;
+				}
+			}
+			var tags = data[0].tags.join(" ");
+		  res.render('show', { page: data[0], similar: similar, tags: tags });
+		});
+	});
+});
+
+router.get('/wiki/id/:id', function(req, res, next) {
+	models.Page.findById(req.params.id, function(err, data) {
+		if (err || !data) { return res.status(404).json(); }
 		data.findSimilar(function(err, similar) {
 			for (var i = 0; i < similar.length; i++) {
 				if (JSON.stringify(data._id) === JSON.stringify(similar[i]._id)) {
@@ -22,6 +42,13 @@ router.get('/wiki/:url_name', function(req, res, next) {
 			var tags = data.tags.join(" ");
 		  res.render('show', { page: data, similar: similar, tags: tags });
 		});
+	});
+});
+
+router.get('/wiki/:url_name/disambiguation', function(req, res, next) {
+	models.Page.find({ url_name: req.params.url_name }, function(err, data) {
+		if (err || data.length < 2) { return res.status(404).json(); }
+		res.render('disambiguation', { title: data[0].title + ' (Disambiguation)', docs: data });
 	});
 });
 

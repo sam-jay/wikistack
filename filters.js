@@ -17,6 +17,10 @@ module.exports = function(swig) {
     return '/wiki/edit/' + page._id;
   };
 
+  var id_link = function(page) {
+    return '<a href="/wiki/id/' + page._id + '">' + page.title + ': ' + page.body +'</a>';
+  };
+
   var markedFilter = function(body) {
     return marked(body);
   };
@@ -26,6 +30,9 @@ module.exports = function(swig) {
       return "<a href='/tags?page_tags="+tag+"'>"+tag+"</a>";
     }).join(' ');
   };
+
+  id_link.safe = true;
+  swig.setFilter('id_link', id_link);
 
   edit_link.safe = true;
   swig.setFilter('edit_link', edit_link);
