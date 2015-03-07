@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <br />
+  <h1>{{title}}</h1>
+  <hr />
+  <br />
+  <form role="form" action="/tags" method="GET">
+	    <label for="page_tags">TAGS</label>
+	    <input name="page_tags" type="text" class="form-control" id="page_tags" placeholder="">
+	    <br />
+	    <button type="submit" class="btn btn-primary">Find</button>
+  </form>
+  <br />
+  {% if showresults %}
+  <h4>RESULTS:</h4>
+  {% if docs.length > 0 %}
+  <ul>
+    {% for doc in docs %}
+      <li>{{doc|page_link}}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    Couldn't find any matches.
+  {% endif %}
+  {% endif %}
+{% endblock %}

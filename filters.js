@@ -17,6 +17,15 @@ module.exports = function(swig) {
     return marked(body);
   };
 
+  var page_tags = function(tags) {
+    return tags.split(' ').map(function (tag) {
+      return "<a href='/tags?page_tags="+tag+"'>"+tag+"</a>";
+    }).join(' ');
+  };
+
+  page_tags.safe = true;
+  swig.setFilter('page_tags', page_tags);
+
   markedFilter.safe = true;
   swig.setFilter('marked', markedFilter);
 

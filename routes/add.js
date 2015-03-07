@@ -22,9 +22,10 @@ router.post('/submit', function(req, res, next) {
 
   var title = req.body.page_title,
       body = req.body.page_content,
-      url_name = generateUrlName(title);
+      url_name = generateUrlName(title),
+      tags = req.body.page_tags.split(" ");
 
-  var p = new models.Page({ "title": title, "body": body, "url_name": url_name });
+  var p = new models.Page({ "title": title, "body": body, "url_name": url_name, "tags": tags });
   p.save();
   res.redirect('/');
 });
