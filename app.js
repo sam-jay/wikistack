@@ -7,12 +7,15 @@ var express = require('express'),
     swig = require('swig'),
     mongoose = require('mongoose');
 
+require('./filters')(swig);
+
 mongoose.connect('mongodb://localhost/wikistack');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongodb connection error:'));
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var add_routes = require('./routes/add');
 
 var app = express();
 
@@ -32,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/add', add_routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

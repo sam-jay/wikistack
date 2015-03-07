@@ -1,6 +1,16 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>{{title}}</h1>
-    <p>Welcome to {{title}}</p>
+  <br />
+  <h1>{{title}}</h1>
+  <hr />
+	{% if docs.length > 0 %}
+  <ul>
+    {% for doc in docs %}
+      <li>{{doc|page_link}}</li>
+    {% endfor %}
+  </ul>
+	{% else %}
+	  There are no pages. Why don't you <a href='/add'>add one</a>?
+	{% endif %}
 {% endblock %}
