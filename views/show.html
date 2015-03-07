@@ -6,6 +6,10 @@
   <hr />
   {{page.body|marked}}
   <br />
+  <form role="form" action="{{page|edit_link}}" method="GET">
+    <button type="submit" class="btn btn-primary">Edit Page</button>
+  </form>
+  <br />
   <h4>SIMILAR PAGES</h4>
   {% for p in similar %}
     <li>{{p|page_link}}</li>

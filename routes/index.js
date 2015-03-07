@@ -25,6 +25,38 @@ router.get('/wiki/:url_name', function(req, res, next) {
 	});
 });
 
+router.get('/wiki/edit/:id', function(req, res, next) {
+	models.Page.findById(req.params.id, function(err, page) {
+		if (err) { return res.status(404).json(); }
+		page.tags = page.tags.join(' ');
+		res.render('edit', { title: 'EDIT PAGE', page: page } );
+	});
+});
+
+router.post('/wiki/edit/:id', function(req, res, next) {
+	models.Page.findById(req.params.id, function(err, page) {
+		if (err) { return res.status(404).json(); }
+
+		var generateUrlName = function(name) {
+		  if (typeof name != "undefined" && name !== "") {
+		    // Removes all non-alphanumeric characters from name
+		    // And make spaces underscore
+		    return name.replace(/\s/ig,"_").replace(/\W/ig,"");
+		  } else {
+		    // Generates random 5 letter string
+		    return Math.random().toString(36).substring(2,7);
+		  }
+		};
+	  page.title = req.body.page_title,
+	  page.body = req.body.page_content,
+	  page.url_name = generateUrlName(page.title),
+	  page.tags = req.body.page_tags.split(" ");
+		page.save(function () {
+			return res.redirect('/');
+		});
+	});
+});
+
 router.get('/find_by_tags', function(req, res, next) {
 	res.render('find_by_tags', { title: 'FIND BY TAGS', showresults: false });
 });

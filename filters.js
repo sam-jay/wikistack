@@ -13,6 +13,10 @@ module.exports = function(swig) {
     return "<a href='"+doc.full_route+"'>"+link_name+"</a>";
   };
 
+  var edit_link = function(page) {
+    return '/wiki/edit/' + page._id;
+  };
+
   var markedFilter = function(body) {
     return marked(body);
   };
@@ -22,6 +26,9 @@ module.exports = function(swig) {
       return "<a href='/tags?page_tags="+tag+"'>"+tag+"</a>";
     }).join(' ');
   };
+
+  edit_link.safe = true;
+  swig.setFilter('edit_link', edit_link);
 
   page_tags.safe = true;
   swig.setFilter('page_tags', page_tags);

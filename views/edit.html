@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <br />
+  <h1>{{title}}</h1>
+  <hr />
+  <br />
+  <form role="form" action="{{page|edit_link}}" method="POST">
+	  <div class="form-group">
+	    <label for="page_title">PAGE TITLE</label>
+	    <input name="page_title" type="text" class="form-control" id="page_title" value="{{page.title}}">
+	    <br />
+	    <label for="page_tags">TAGS</label>
+	    <input name="page_tags" type="text" class="form-control" id="page_tags" value="{{page.tags}}">
+	    <br />
+	    <label for="page_content">PAGE CONTENT</label>
+	    <textarea name="page_content" class="form-control" rows="25" id="page_content">{{page.body}}</textarea>
+	    <br />
+	    <button type="submit" class="btn btn-primary">Submit</button>
+	  </div>
+	</form>
+{% endblock %}
